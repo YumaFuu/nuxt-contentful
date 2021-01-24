@@ -2,7 +2,6 @@
   <v-app>
     <v-app-bar
       app
-      absolute
       >
       <v-tabs
         fixed-tabs
@@ -22,10 +21,3 @@
     </v-main>
   </v-app>
 </template>
-
-<style>
-.v-application{
-  font-family: 'M PLUS Rounded 1c', sans-serif;
-}
-</style>
-
