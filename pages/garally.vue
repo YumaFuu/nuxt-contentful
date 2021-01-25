@@ -9,7 +9,7 @@
       :key="item.id"
     >
       <v-card
-        max-width="700"
+        max-width="450"
         class="mx-auto"
         >
       <v-img
