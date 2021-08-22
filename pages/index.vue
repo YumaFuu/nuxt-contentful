@@ -1,52 +1,44 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col>
-      <v-card
-        class="mx-auto"
-        align="center"
-        max-width="1200"
-        >
-        <v-sheet min-height="50"></v-sheet>
-        <v-img
-          contain
-          max-height="400"
-          :src="profile.fields.mainImage.fields.file.url"
-          >
-        </v-img>
-          <v-sheet
-            tile
-            class="px-4 pt-4 pb-3"
-            >
-            <div class="ma-5 text-h3 font-weight-thin">
-              Takagi Ayano
-            </div>
-            <div class="ma-5 text-h2 font-weight-thin">
-              鷹木 彩乃
-            </div>
-            <div
-              class="ma-5 text-h4 font-weight-thin"
-              >works</div>
-          </v-sheet>
-          <v-sheet min-height="40"></v-sheet>
-      </v-card>
-    </v-col>
-  </v-row>
+  <div class="d-flex justify-center mx-4">
+    <v-card
+      align="center"
+      width="1200"
+    >
+      <v-img
+        contain
+        max-width="900"
+        max-height="400"
+        :src="src"
+      />
+      <div class="px-4 pt-4 pb-7">
+        <div class="ma-5 text-h3 font-weight-thin">
+          Takagi Ayano
+        </div>
+        <div class="ma-5 text-h2 font-weight-thin">
+          鷹木 彩乃
+        </div>
+        <div class="ma-5 text-h4 font-weight-thin">
+          works
+        </div>
+      </div>
+    </v-card>
+  </div>
 </template>
 
 <script>
-import contentfulClient from '@/plugins/contentful'
-const client = contentfulClient
+import { Vue, Component } from 'vue-property-decorator'
 
-export default {
-  asyncData() {
-    return client
-      .getEntries({ content_type: "profile" })
-      .then((profiles) => {
-        return {
-          profile: profiles.items[0]
-        }
-      })
-      .catch(console.error)
+import client from '@/plugins/contentful'
+
+@Component
+export default class Index extends Vue {
+  src = ''
+
+  created() {
+    client.getEntries({ content_type: 'profile' }).then((profiles) => {
+      const profile = profiles.items[0]
+      this.src = profile.fields.mainImage.fields.file.url
+    })
   }
 }
 </script>

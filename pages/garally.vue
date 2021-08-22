@@ -1,56 +1,53 @@
 <template>
-  <v-row
-    justify="center"
-    align="center"
-    >
-    <v-col
-      cols="12"
-      v-for="item in posts"
-      :key="item.id"
-    >
-      <v-card
-        max-width="450"
-        class="mx-auto"
-        >
-      <v-img
-        position="center"
-        :src="item.fields.image.fields.file.url"
-      >
-      </v-img>
-      <v-card-title class="headline">
-        {{ item.fields.title }}
-      </v-card-title>
-      <v-card-text>
-        <p>{{ item.fields.createdAt }}</p>
-        <p>{{ item.fields.size }}</p>
-        <p class="font-weight-medium">
-          {{ item.fields.description }}
-        </p>
-      </v-card-text>
-      </v-card>
-    </v-col>
-  </v-row>
-
+  <div class="d-flex justify-center flex-wrap">
+    <template v-for="(post, i) in posts">
+      <garally-item
+        :key="i"
+        :post="post"
+        class="mx-2 mt-4"
+      />
+    </template>
+  </div>
 </template>
 
 <script>
-import contentfulClient from '@/plugins/contentful'
-const baseUrl = "https://images.ctfassets.net"
+import { Vue, Component } from 'vue-property-decorator'
+import client from '@/plugins/contentful'
 
-export default {
-  asyncData() {
-    return contentfulClient
+import GarallyItem from '@/components/garally-item.vue'
+
+@Component({
+  components: {
+    GarallyItem,
+  },
+})
+export default class Garally extends Vue {
+  posts = []
+
+  created() {
+    client.getEntries({ content_type: 'profile' }).then((profiles) => {
+      const profile = profiles.items[0]
+      this.src = profile.fields.mainImage.fields.file.url
+    })
+    client
       .getEntries({
-        content_type: "post",
-        order: "fields.order",
+        content_type: 'post',
+        order: 'fields.order',
       })
       .then((entries) => {
-        return {
-          posts: entries.items
-        }
-      }
-    )
-    .catch(console.error)
-  },
+        entries.items.forEach((post) => {
+          const p = {
+            src: post.fields.image.fields.file.url,
+            title: post.fields.title,
+            createdAt: post.fields.createdAt,
+            size: post.fields.size,
+            description: post.fields.description,
+          }
+
+          this.posts.push(p)
+        })
+      })
+      .catch(console.error)
+  }
 }
 </script>
