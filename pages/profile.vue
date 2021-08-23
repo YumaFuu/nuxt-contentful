@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex justify-center">
-    <v-card width="1200">
+    <v-card class="mb-5" width="1200">
       <v-img
         contain
         max-height="400"
